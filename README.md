@@ -1,4 +1,4 @@
-#Biblioteca Virtual UNTEC
+## Biblioteca Virtual UNTEC
 
 Este proyecto es un ejercicio de aprendizaje, exploración y moderación.
 Aprendizaje en cuánto a los conceptos que se desprenden: Autenticación y Autorización,
@@ -6,7 +6,7 @@ uso de patrón MVC, persistencia a través de la capa DAO. Todo lo mencionado mi
 
 Exploración en cuánto a lo que el proyecto podría llegar a ser y las tecnologías que se podrían utilizar (a discutir posteriormente) y moderación: un acto de balance entre no sobredimesionar el alcance del proyecto en su carácter educativo y manejar la naturaleza abierta de la especifícación.
 
-##Toma de desiciones
+## Toma de desiciones
 
 Dada la amplitud de la especifícación, como se mencionó anteriormente y como no se específica ningún rol, determinamos crear un solo usuario administrador con acceso a las funciones de:
     - Autenticarse y obtener usuarios (UsuarioService).
@@ -37,55 +37,57 @@ Y los siguientes inserts para fines de demostración:
 
 En cuánto a la base de datos se eligió el motor h2 por un asunto de simplicidad, aunque bien se podría realizar una carga defensiva de múltiples motores de bases de datos para entregar cierto grado de interoperabilidad y manteniendo la facilidad de uso.
 
-##Estructura de proyecto
+## Estructura de proyecto
+```
 .
 ├── pom.xml
+├── README.md
 ├── src
-│   ├── main
-│   │   ├── java
-│   │   │   └── cl
-│   │   │       └── untec
-│   │   │           └── biblioteca_virtual
-│   │   │               ├── config
-│   │   │               │   └── dbConnection.java
-│   │   │               ├── controller
-│   │   │               │   ├── DashboardController.java
-│   │   │               │   ├── LibroController.java
-│   │   │               │   ├── LoginController.java
-│   │   │               │   ├── LogoutController.java
-│   │   │               │   ├── PrestamosController.java
-│   │   │               │   └── TestDbServlet.java
-│   │   │               ├── dao
-│   │   │               │   ├── LibroDAO.java
-│   │   │               │   ├── PrestamoDAO.java
-│   │   │               │   └── UsuarioDAO.java
-│   │   │               ├── model
-│   │   │               │   ├── Libro.java
-│   │   │               │   ├── Prestamo.java
-│   │   │               │   └── Usuario.java
-│   │   │               └── service
-│   │   │                   ├── LibroService.java
-│   │   │                   ├── PrestamoService.java
-│   │   │                   └── UsuarioService.java
-│   │   ├── resources
-│   │   │   └── db
-│   │   │       └── 001_init.sql
-│   │   └── webapp
-│   │       ├── assets
-│   │       │   └── styles.css
-│   │       ├── index.jsp
-│   │       └── WEB-INF
-│   │           ├── views
-│   │           │   ├── catalog.jsp
-│   │           │   ├── dashboard.jsp
-│   │           │   ├── error.jsp
-│   │           │   ├── loans.jsp
-│   │           │   ├── login.jsp
-│   │           │   └── logout.jsp
-│   │           └── web.xml
-│   └── README.md
+│   └── main
+│       ├── java
+│       │   └── cl
+│       │       └── untec
+│       │           └── biblioteca_virtual
+│       │               ├── config
+│       │               │   └── dbConnection.java
+│       │               ├── controller
+│       │               │   ├── DashboardController.java
+│       │               │   ├── LibroController.java
+│       │               │   ├── LoginController.java
+│       │               │   ├── LogoutController.java
+│       │               │   ├── PrestamosController.java
+│       │               │   └── TestDbServlet.java
+│       │               ├── dao
+│       │               │   ├── LibroDAO.java
+│       │               │   ├── PrestamoDAO.java
+│       │               │   └── UsuarioDAO.java
+│       │               ├── model
+│       │               │   ├── Libro.java
+│       │               │   ├── Prestamo.java
+│       │               │   └── Usuario.java
+│       │               └── service
+│       │                   ├── LibroService.java
+│       │                   ├── PrestamoService.java
+│       │                   └── UsuarioService.java
+│       ├── resources
+│       │   └── db
+│       │       └── 001_init.sql
+│       └── webapp
+│           ├── assets
+│           │   └── styles.css
+│           ├── index.jsp
+│           └── WEB-INF
+│               ├── views
+│               │   ├── catalog.jsp
+│               │   ├── dashboard.jsp
+│               │   ├── error.jsp
+│               │   ├── loans.jsp
+│               │   ├── login.jsp
+│               │   └── logout.jsp
+│               └── web.xml
+```
 
-##Como evolucionar el proyecto
+## Como evolucionar el proyecto
 
 Como se mencionó anteriormente, en este proyecto hubo que ejercer cierta mesura en cuanto a las cosas que se podrían hacer con este tipo de proyecto considerando la vagueza de las especifícaciones y los plazos a cumplir. Este proyecto puede evolucionar de muchas maneras, pero debemos entender su carácter educativo para comprender conceptos básicos de desarrollo web y como este marca una diferencia con el siguiente paso. 
 
