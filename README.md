@@ -20,7 +20,7 @@ Para apoyar estas funciones se crearon los siguientes modelos con sus correspond
 - Libro (LibroDAO).
 - Prestamo (PrestamoDAO).
 
-Y finalmente para obtener los datos ingresados por los usuarios y para que estos puedan interactuar con las distintas vistas, se craron los siguientes controladores:
+Y finalmente para obtener los datos ingresados por los usuarios y para que estos puedan interactuar con las distintas vistas, se crearon los siguientes controladores:
 
 - DashboardController (Menú principal para acceso a otras vistas)
 - LibroController (Ingreso y visualización de catálogo de libros)
@@ -92,6 +92,53 @@ VALUES
 
 En cuánto a la base de datos se eligió el motor h2 por un asunto de simplicidad, aunque bien se podría realizar una carga defensiva de múltiples motores de bases de datos para entregar cierto grado de interoperabilidad y manteniendo la facilidad de uso.
 
+## Guía Rápida
+### Pre-Requisitos
+- JDK 21 o superior
+- Maven 3 o superior
+- Tomcat 9
+
+Desde tu línea de comandos, clona el repositorio:
+
+```
+git clone https://github.com/inmate302/biblioteca-virtual-UNTEC.git
+```
+
+Desde el directorio raíz del proyecto empaqueta el proyecto usando maven:
+
+```
+mvn clean package
+```
+
+Esta guía asume que el usuario conoce el uso de Tomcat.
+Aún así, se recomienda la extensión de vscode 
+[Tomcat Manager for VS Code](https://github.com/martin5211/TomcatManager),
+la cuál ya habiendo descargado y descomprimido [Tomcat](https://tomcat.apache.org/download-90.cgi) en un directorio
+con los permisos de ejecución y escritura necesarios, permite desde VS Code
+correr los comandos **Tomcat:Run** y **Tomcat: Deploy**.
+
+Se despliega la paleta de comandos con Ctrl + Shift + P
+y completas con el respectivo comando.
+
+<img width="644" height="191" alt="image" src="https://github.com/user-attachments/assets/d94ab4fe-d614-44a4-99c7-e22467a90949" />
+
+
+Una vez ya creado el archivo biblioteca-virtual.war con maven y
+desplegada la webapp con Tomcat
+puedes acceder a la aplicación en tu navegador con la siguiente URL:
+
+```
+https:localhost:8080/biblioteca-virtual
+```
+
+Luego en la pantalla de inicio de sesión puedes ingresar
+usando las siguientes credenciales:
+
+```
+email: admin@untec.cl
+password: untec2026
+```
+
 ## Estructura de proyecto
 ```
 .
@@ -148,8 +195,8 @@ Como se mencionó anteriormente, en este proyecto hubo que ejercer cierta mesura
 
 También debemos de pensar que cosas mejorarían a este proyecto, y cuáles son exigencias básicas de una aplicación web moderna que van más allá de las responsividad y lo estético. Exigencias tales como considerar el uso de tokens de sesión o hashear los passwords de nuestros usuarios antes de guardarlos en nuestra base de datos en texto plano, tener roles de sesión y sus respectivas funciones claramente establecidas o realizar carga defensiva de múltiples motores de base de datos para manejar un nivel de interoperabilidad. 
 
-Pero en específico de este proyecto si hay cosas que lo llevarían al siguiente nivel, cosas tales como implementar un dto para consumir de una API pública como OpenLibrary o Penguin Publishing integrando un sistema de búsqueda que permita al usuario o administrador acceder a detalles de los libros y mejorar la experienca de uso. Teniendo especificaciones claras como cuántos libros máximo puede pedir un usuario, qué medidas se tomarían en caso de devoluciones atrasadas o de destrucción del libro e incluso que cuerpo burocrático tendría que encargarse de elevar una solicitud para levantar probables medidas disciplinarias. Es más, también podriamos pensar en incorporar un sistema de lectura de código para llevar un inventario interno de libros y si es más factible una solución desarrollada en casa o una solución propietaria. 
+Pero en específico de este proyecto si hay cosas que lo llevarían al siguiente nivel, cosas tales como implementar un dto para consumir de una API pública como [OpenLibrary](https://openlibrary.org/developers/api) o [Penguin Publishing](https://www.penguinrandomhouse.biz/webservices/rest/) integrando un sistema de búsqueda que permita al usuario o administrador acceder a detalles de los libros y mejorar la experienca de uso. Teniendo especificaciones claras como cuántos libros máximo puede pedir un usuario, qué medidas se tomarían en caso de devoluciones atrasadas o de destrucción del libro e incluso que cuerpo burocrático tendría que encargarse de elevar una solicitud para levantar probables medidas disciplinarias. Es más, también podriamos pensar en incorporar un sistema de lectura de código para llevar un inventario interno de libros y si es más factible una solución desarrollada en casa o una solución propietaria. 
 
-En definitiva y perdonando la divagación, este proyecto nos permitió poner en práctica conceptos de desarrollo web, pero también y más importante aún, pensamiento en sistemas.
+En definitiva y perdonando la divagación, este proyecto nos permitió poner en práctica conceptos de desarrollo web, pero también y más importante aún, nos permitió pensar en sistemas.
 
 
