@@ -92,6 +92,7 @@ VALUES
 
 En cuánto a la base de datos se eligió el motor h2 por un asunto de simplicidad, aunque bien se podría realizar una carga defensiva de múltiples motores de bases de datos para entregar cierto grado de interoperabilidad y manteniendo la facilidad de uso.
 
+
 ## Guía Rápida
 ### Pre-Requisitos
 - JDK 21 o superior
@@ -123,12 +124,13 @@ y completas con el respectivo comando.
 <img width="644" height="191" alt="image" src="https://github.com/user-attachments/assets/d94ab4fe-d614-44a4-99c7-e22467a90949" />
 
 
+
 Una vez ya creado el archivo biblioteca-virtual.war con maven y
 desplegada la webapp con Tomcat
 puedes acceder a la aplicación en tu navegador con la siguiente URL:
 
 ```
-https:localhost:8080/biblioteca-virtual
+https://localhost:8080/biblioteca-virtual
 ```
 
 Luego en la pantalla de inicio de sesión puedes ingresar
@@ -138,6 +140,7 @@ usando las siguientes credenciales:
 email: admin@untec.cl
 password: untec2026
 ```
+
 
 ## Estructura de proyecto
 ```
