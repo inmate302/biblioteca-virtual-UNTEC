@@ -1,6 +1,8 @@
 package cl.untec.biblioteca_virtual.controller;
 
 import cl.untec.biblioteca_virtual.service.LibroService;
+import cl.untec.biblioteca_virtual.service.PrestamoService;
+import cl.untec.biblioteca_virtual.dao.PrestamoDAO;
 import cl.untec.biblioteca_virtual.model.Libro;
 
 import javax.servlet.ServletException;
@@ -17,7 +19,7 @@ import java.util.List;
 public class LibroController extends HttpServlet {
     
     private LibroService libroService;
-    
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -27,7 +29,7 @@ public class LibroController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
+        PrestamoDAO prestamo = new PrestamoDAO();        
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("usuario") == null) {
             response.sendRedirect("login");
@@ -37,19 +39,26 @@ public class LibroController extends HttpServlet {
         String action = request.getParameter("action");
         
         try {
-            if (action == null || action.equals("listar")) {
+            if ("checkLoans".equals(action)) {
+                long libroId = Long.parseLong(request.getParameter("libroId"));
+                int activeLoans = prestamo.obtenerPorLibro(libroId).size();
+                
+                response.setContentType("application/json");
+                response.getWriter().write("{\"activeLoans\": " + activeLoans + "}");
+                return;
+            } else if (action == null || action.equals("listar")) {
                 listarLibros(request, response);
-            }  else if (action.equals("disponibles")) {
+            } else if (action.equals("disponibles")) {
                 listarDisponibles(request, response);
-            }  else {
+            } else {
                 listarLibros(request, response);
             }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                request.setAttribute("error", "Error al acceder a la base de datos");
-                request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Error al acceder a la base de datos");
+            request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
         }
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
@@ -120,15 +129,25 @@ public class LibroController extends HttpServlet {
       
     public void eliminarLibro(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, ServletException, IOException {
-        
+        PrestamoDAO prestamo = new PrestamoDAO();        
         try {
             Long id = Long.parseLong(request.getParameter("id"));
+            
+            int activeLoans = prestamo.obtenerPorLibro(id).size();
+            
+            if (activeLoans > 0) {
+                request.getSession().setAttribute("error", 
+                    "No se puede eliminar este libro. Tiene " + activeLoans + " préstamo(s) activo(s).");
+                response.sendRedirect(request.getContextPath() + "/dashboard?view=catalog");
+                return;
+            }
+            
             libroService.eliminarLibro(id);
             
             request.getSession().setAttribute("message", "Libro eliminado exitosamente");
-            response.sendRedirect(request.getContextPath() + "/dashboard?view=catalog");  // ✅ Same as agregar
+            response.sendRedirect(request.getContextPath() + "/dashboard?view=catalog");  
             
-        } catch (NumberFormatException e) {  // ✅ Catch this first
+        } catch (NumberFormatException e) {
             request.getSession().setAttribute("error", "ID de libro inválido");
             response.sendRedirect(request.getContextPath() + "/dashboard?view=catalog");
         } catch (IllegalArgumentException e) {
@@ -139,4 +158,5 @@ public class LibroController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/dashboard?view=catalog");
         }
     }
+
 }

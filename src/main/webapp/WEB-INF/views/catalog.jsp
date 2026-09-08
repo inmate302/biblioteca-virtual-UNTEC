@@ -59,6 +59,99 @@
     </div>
 </div>
 
+<div id="deleteBookModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Eliminar Libro</h3>
+            <button type="button" class="modal-close" onclick="closeDeleteModal()">&times;</button>
+        </div>
+        
+        <div id="deleteConfirmSection">
+            <p style="color: #333; margin-bottom: 1rem;">¿Estás seguro de que deseas eliminar el libro <strong id="bookTitleConfirm"></strong>?</p>
+            <p style="color: #999; font-size: 0.9em; margin-bottom: 1.5rem;">Esta acción no se puede deshacer.</p>
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Cancelar</button>
+                <button type="button" class="btn-danger" onclick="confirmDeleteBook()">Eliminar Libro</button>
+            </div>
+        </div>
+        
+        <div id="activeLoansSection" style="display: none;">
+            <p style="color: #d32f2f; font-weight: bold; margin-bottom: 1rem;">⚠️ No se puede eliminar este libro</p>
+            <p style="color: #333; margin-bottom: 0.5rem;">El libro <strong id="bookTitleWarning"></strong> tiene <span id="activeLoansCount"></span> préstamo(s) activo(s).</p>
+            <p style="color: #999; font-size: 0.9em; margin-bottom: 1.5rem;">Debes esperar a que todos los préstamos sean devueltos antes de poder eliminar este libro.</p>
+            <div class="form-actions">
+                <button type="button" class="btn-primary" onclick="closeDeleteModal()">Entendido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentBookId = null;
+let currentBookTitle = null;
+
+function openDeleteModal(bookId, bookTitle) {
+    currentBookId = bookId;
+    currentBookTitle = bookTitle;
+    deleteBookModal.style.display = 'flex';
+    catalogSection.classList.add('blurred');
+    
+    fetch('${pageContext.request.contextPath}/libro?action=checkLoans&libroId=' + bookId)
+        .then(response => response.json())
+        .then(data => {
+            const deleteConfirmSection = document.getElementById('deleteConfirmSection');
+            const activeLoansSection = document.getElementById('activeLoansSection');
+            
+            if (data.activeLoans > 0) {
+                deleteConfirmSection.style.display = 'none';
+                activeLoansSection.style.display = 'block';
+                document.getElementById('bookTitleWarning').textContent = bookTitle;
+                document.getElementById('activeLoansCount').textContent = data.activeLoans;
+            } else {
+                deleteConfirmSection.style.display = 'block';
+                activeLoansSection.style.display = 'none';
+                document.getElementById('bookTitleConfirm').textContent = bookTitle;
+            }
+            
+            document.getElementById('deleteBookModal').style.display = 'flex';
+        })
+        .catch(error => {
+            console.error('Error checking loans:', error);
+            alert('Error al verificar préstamos. Por favor, intenta de nuevo.');
+        });
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteBookModal').style.display = 'none';
+    currentBookId = null;
+    currentBookTitle = null;
+    deleteBookModal.style.display = 'none';
+    catalogSection.classList.remove('blurred');
+}
+
+function confirmDeleteBook() {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '${pageContext.request.contextPath}/libro?action=eliminar';
+    
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'id';
+    input.value = currentBookId;
+    
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+}
+
+window.addEventListener('click', function(event) {
+    let deleteModal = document.getElementById('deleteBookModal');
+    if (event.target === deleteModal) {
+        deleteModal.style.display = 'none';
+    }
+});
+</script>
+
 <div class="catalog-section">
     <div class="catalog-header">
         <h2>Catálogo de Libros</h2>
@@ -94,12 +187,9 @@
                             <c:if test="${libro.stock > 0}">
                                 <button type="button" class="btn-action btn-loan" data-libro-id="${libro.id}">Prestar</button>
                             </c:if>
-                            <form method="post" action="${pageContext.request.contextPath}/libro?action=eliminar">
-                                <input type="hidden" name="id" value="${libro.id}">
-                                <button type="submit" class="btn-action btn-delete" onclick="return confirm('¿Está seguro de que desea eliminar este libro? No se podrá recuperar.');">
-                                    Eliminar
-                                </button>
-                            </form>
+                            <button type="button" class="btn-action btn-delete" onclick="openDeleteModal(${libro.id}, '${libro.titulo}')">
+                                Eliminar
+                            </button>
                         </td>
                     </tr>
                 </c:forEach>
